@@ -1,179 +1,166 @@
-﻿PART 1
-clone the repo into your application.
+# Commodity Request Management System
 
-Running the Application
-1. Start the Database
-	docker-compose up -d
-2. Start the Backend
-  
-   cd server
-   npm install
-   npm run dev
-3. Start the Frontend
-   
-   cd ../client
-   npm install
-   npm run dev
-   Testing the Application
-   Access the frontend at http://localhost:5173
+## Overview
 
-Use the CHW portal to submit requests
+This application provides a system for managing commodity requests from Community Health Workers (CHWs) and approvals by Community Health Assistants (CHAs). It includes a modern frontend, a backend with a documented API, and a PostgreSQL database.
 
-Use the CHA portal to approve/reject requests
+---
 
-Access API documentation at http://localhost:5000/api-docs
+## Running the Application
 
-Key Features Implemented
-Form Logic:
+### 1. Start the Database
 
-Auto-selection of CHA based on CHW
+```bash
+docker-compose up -d
+```
 
-Configurable commodities
+### 2. Start the Backend
 
-Quantity validation (1-100)
+```bash
+cd server
+npm install
+npm run dev
+```
 
-Daily and monthly limits enforcement
+### 3. Start the Frontend
 
-Dashboard:
+```bash
+cd ../client
+npm install
+npm run dev
+```
 
-Visual representation of request status
+### 4. Access the Application
 
-Commodity distribution charts
+* Frontend: [http://localhost:5173](http://localhost:5173)
+* API Docs: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
 
-Summary statistics
+---
 
-Professional Standards:
+## Portals
 
-TypeScript for type safety
+* **CHW Portal**: Submit commodity requests.
+* **CHA Portal**: Approve or reject requests.
 
-Modular architecture
+---
 
-Proper separation of concerns
+## Key Features Implemented
 
-Swagger API documentation
+### Form Logic
 
-React Query for data management
+* Auto-selection of CHA based on CHW
+* Configurable commodity options
+* Quantity validation (1-100)
+* Daily and monthly request limits enforced
 
-Form validation with react-hook-form
+### Dashboard
 
-Material UI for professional UI components
+* Visual representations of request statuses
+* Commodity distribution charts
+* Summary statistics for monitoring
 
-Database:
+### Professional Standards
 
-PostgreSQL with Sequelize ORM
+* **TypeScript**: For type safety
+* **React Query**: Data fetching and caching
+* **Material UI**: UI components
+* **React Hook Form**: Form handling and validation
+* **Swagger**: API documentation
+* **Separation of Concerns**: Modular, scalable architecture
 
-Proper data modeling with relationships
+### Database
 
-Data validation at database level
+* **PostgreSQL with Sequelize ORM**
+* Relational data modeling (Users, Commodities, Requests)
+* Validation at schema and ORM levels
 
+---
 
-Core Components (Based on Medic Mobile's Architecture):
-Mobile Clients:
+## Core Components Based on Medic Mobile Architecture
 
-Android applications for CHWs (likely using Cordova or similar framework)
+### Mobile Clients
 
-Offline-first design with local data storage
+* Android app for CHWs (Cordova-based or similar)
+* Offline-first with local storage
+* Syncs data when online
 
-Synchronization capabilities when connectivity available
+### Sync Server
 
-Sync Server:
+* Intermediary between mobile devices and cloud database
+* Handles authentication, conflict resolution
+* Manages secure sync operations
 
-Acts as intermediary between mobile devices and database
+### Database Layer
 
-Handles conflict resolution during data synchronization
+* CouchDB (legacy) or PostgreSQL (current)
+* Flexible, document-oriented or relational schemas
+* Native replication and sync capabilities
 
-Manages user authentication and authorization
+### API Layer
 
-Database Layer:
+* REST APIs with Swagger docs
+* OAuth or JWT authentication
 
-Typically uses CouchDB (or PostgreSQL in newer versions)
+### Monitoring and Analytics
 
-Document-oriented storage for flexible data models
+* Integrated logging
+* Performance monitoring
+* Basic analytics dashboard
 
-Built-in replication capabilities for distributed systems
+---
 
-API Layer:
+## Key Architectural Characteristics
 
-RESTful APIs for web applications
+### 1. Current Architecture
 
-Possibly GraphQL for more complex queries
+* Mobile-first with offline support
+* Sync-capable database layer (CouchDB or PostgreSQL)
+* Modular, extensible system
 
-Authentication via OAuth or JWT
+### 2. Scaling Considerations
 
-Monitoring and Analytics:
+#### Technical
 
-Logging infrastructure
+* Sharded database with regional replicas
+* Sync protocol optimization
+* Load balancing and containerization
 
-Performance monitoring tools
+#### Organizational
 
-Basic analytics dashboard
+* Support county-specific workflows
+* Device provisioning & training
+* Role-based access control
 
-Key Architectural Characteristics:
-1. Key Observations About Current Architecture
-   Mobile-first with offline capabilities (critical for remote areas)
+### 3. Scaling Components
 
-Uses CouchDB for flexible data storage and sync
+| Component   | Strategy                           |
+| ----------- | ---------------------------------- |
+| Database    | Shard by region, read replicas     |
+| API Layer   | Dockerized, horizontally scaled    |
+| Sync Server | Regional hubs, optimized protocols |
+| Caching     | Redis for frequently accessed data |
 
-Central sync server handles device-to-cloud communication
+### 4. Bottlenecks & Solutions
 
-Modular design allows extensions
+| Bottleneck            | Solution                       |
+| --------------------- | ------------------------------ |
+| Sync congestion       | Prioritize/stagger sync tasks  |
+| Database write limits | Batch + async write processing |
+| Poor network access   | Enhance offline functionality  |
+| Device storage limits | Auto-purge old data            |
 
-2. Scaling Considerations
-   Technical:
+### 5. Proposed Enhancements
 
-Database optimization (sharding, indexing)
+* **Edge Computing**: Local servers at county hubs
+* **Microservices**: Split into user, commodity, sync services
+* **Streaming Data Pipeline**: For real-time analytics
+* **Advanced Monitoring**: Distributed observability tools
 
-Efficient sync protocols to handle many devices
+---
 
-Regional servers to reduce latency
+## Pilot Rollout: Migori County
 
-Robust user/role management
-
-Organizational:
-
-Support for county-specific customizations
-
-Training programs for new regions
-
-Device management strategies
-
-3. How to Scale Components
-   Database: Shard by region + add read replicas
-
-API Layer: Containerize + auto-scale horizontally
-
-Sync Service: Deploy regional hubs + optimize data transfer
-
-Caching: Redis for frequent queries
-
-4. Bottlenecks & Solutions
-   Bottleneck	Solution
-   Sync congestion	Stagger sync times + prioritize data
-   Database write overload	Batch writes + async processing
-   Poor connectivity	Stronger offline support + compression
-   Device storage limits	Automatic data cleanup
-5. Proposed Improvements
-   Edge Computing
-
-Local servers → County hubs → National cloud
-
-Microservices
-
-Split into focused services (users, commodities, analytics)
-
-Modern Data Pipeline
-
-Real-time streaming 
-
-Enhanced Monitoring
-
-Track performance across distributed systems
-
-Pilot Focus (Migori County)
-Assess local infrastructure (network, devices)
-
-Plan for 3-5x user growth
-
-Customize for local language/workflows
-
-Integrate with county health systems
+* Assess local network/device capacity
+* Customize flows for local language and needs
+* Align with county health systems
+* Plan for scaling to 3-5x user base
